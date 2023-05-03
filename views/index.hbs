@@ -1,2 +1,100 @@
-<h1>{{appTitle}} 🚀</h1>
-<p>Welcome Ironhacker!</p>
+
+{{!Escondemos la navBar}}
+
+<style>header {
+ display: none !important;
+}</style>
+
+<section class="h-screen bg-no-repeat bg-cover border-y-white border-y-xl" style="background-image: url(https://yesirave.com/wp-content/uploads/2022/05/how-long-do-music-festivals-last-1080x675.png)">
+<section class="grid grid-cols-2 pt-16 pb-24 mx-auto max-h-full hover:max-h-screen" >
+
+  <div class=" max-w-2xl pt-10 pb-10">
+  
+  <h1 class="overline tracking-wide decoration-gray-50 text-5xl text-bold mb-5 pl-4">Worldwide Festivals Finder</h1>
+  <p class="pl-8">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ab aliquid earum minima ducimus, repudiandae, illum quasi maxime impedit, rerum et assumenda! Quod accusantium ea sit sint est, error nostrum provident.</p>
+  </div>
+
+  {{!Formularios}}
+
+  <div class="grid grid-cols-2 gap-10 md:mx-auto max-w-xl pt-20 pb-20 items-center">
+
+    {{!Formulario de acceso a la web}}
+
+    <div class="">
+
+      <h2 class="text-back text-2xl font-bold mb-2">Login</h2>
+
+      <div class="w-full max-w-xs opacity-90 hover:opacity-100">
+        <form action="/user/login" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          {{#if errorMessage }}
+            <div class="message message--error">
+              {{ errorMessage }}
+            </div>
+          {{/if}}
+
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+              Email
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="email">
+          </div>
+          <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+              Password
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************">
+          </div>
+          <div class="flex items-center justify-between">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+              Log in
+            </button>
+            <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
+              Forgot Password?
+            </a>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+      {{!Formulario de registro}}
+
+    <div>
+
+      <h2 class="text-black text-2xl font-bold mb-2">Register a new User</h2>
+
+      <div class="w-full max-w-xs opacity-90 hover:opacity-100">
+        <form action="/user/register" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          {{#if errorMessage }}
+          <div class="message message--error">
+            {{ errorMessage }}
+          </div>
+        {{/if}}
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+              Email
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="email">
+          </div>
+          <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+              Password
+            </label>
+            <input class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************">
+           {{! <p class="text-red-500 text-xs italic">Please choose a password.</p> }}
+          </div>
+          <div class="flex items-center justify-between">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+              Sign In
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</section>
