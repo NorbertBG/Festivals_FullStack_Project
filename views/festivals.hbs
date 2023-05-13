@@ -1,13 +1,13 @@
 
 
 <div class="container flex flex-wrap -mb-4 ml-5 mr-5 mt-5 gap-5">
-    
+
 {{#each datafromDB }}
 
     <div class="w-1/3 max-w-sm rounded overflow-hidden shadow-lg">
     <img class="w-full" src="https://blog.erasmusgeneration.org/sites/default/files/articles/2022-02/576364502a3f379b77617193680e21ff.jpg" alt="Sunset in the mountains">
     <div class="px-6 py-4">
-        <div class="font-bold text-xl mb-2">{{this.name}}</div>
+        <div class="font-bold text-xl mb-2"><a href="/festivals/{{ this.id }}">{{this.name}}</a></div>
         <p class="text-gray-700 text-base">
         {{this.description}}
         </p>
@@ -22,3 +22,4 @@
 {{/each}}
 
 </div>
+
