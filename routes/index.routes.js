@@ -2,9 +2,15 @@ const express = require('express');
 const router = express.Router();
 const appGenres = require("../utils/genres");
 
+// ********* require fileUploader in order to use it *********
+const fileUploader = require('../config/cloudinary.config');
+
+const countryList = require("../middleware/getCountryList");
+
 // Require the Festival model in order to interact with the database
 const mongoose = require("mongoose");
 const Festival = require("../models/Festival.model");
+
 
 /* GET home page where you can login or register */
 router.get("/", (req, res, next) => {
@@ -38,15 +44,20 @@ router.get("/:city/festivals", (req, res, next) => {
 
 
 /* GET add a new festival */
-router.get("/festivals/new", (req, res, next) => {
-  res.render("new-festival", { appGenres });
+router.get("/festivals/new", countryList, (req, res, next) => {
+  const countries = [];
+  req.countries.data.forEach(item => {
+    countries.push(item.country);
+  });
+  res.render("new-festival", { appGenres, countries: countries });
 });
 
 /* POST add a new festival */
-router.post("/festivals/new", (req, res, next) => {
-  const data = req.body;
-  console.log(data)
-  Festival.create(data).then( (datafromDB) => {
+router.post("/festivals/new",fileUploader.single('eventImage'), (req, res, next) => {
+  const { name, country, city, description, genre, season } = req.body;
+
+  Festival.create({ name, country, city, description, genre, season, eventImage: req.file.path })
+  .then( (datafromDB) => {
    console.log(datafromDB)
     res.redirect('/festivals');
   });

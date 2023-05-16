@@ -15,14 +15,23 @@ const festivalSchema = new Schema(
         type: String,
         required: true,
       },
+    eventImage: {
+        type: String,
+      },
     season: {
         type: String,
         required: true,
       },
-    location: {
+      
+    country: {
         type: String,
         required: true,
       },
+    city: {
+        type: String,
+        required: true,
+      },
+    
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
