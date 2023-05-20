@@ -5,15 +5,26 @@ const userSchema = new Schema(
   {
     email: {
       type: String,
-      required: true,
       unique: true,
       trim: true,
-      lowercase: true,
+      lowercase: true
     },
     password: {
       type: String,
-      required: true,
     },
+    firstName: {
+      type: String
+    },
+    lastName: {
+      type: String
+    },
+    bio: {
+      type: String
+    },
+    profileImage: {
+      type: String,
+    },
+    Festival: [{ type: Schema.Types.ObjectId, ref: "Festival" }]
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

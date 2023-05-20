@@ -7,34 +7,35 @@ const festivalSchema = new Schema(
       required: true,
       unique: true,
     },
-    description : {
-        type: String,
-        required: true,
-      },
+    description: {
+      type: String,
+      required: true,
+    },
     genre: {
-        type: String,
-        required: true,
-      },
+      type: String,
+      required: true,
+    },
     eventImage: {
-        type: String,
-      },
+      type: String,
+    },
     season: {
-        type: String,
-        required: true,
-      },
-      
+      type: String,
+      required: true,
+    },
     country: {
-        type: String,
-        required: true,
-      },
+      type: String,
+      required: true,
+    },
     city: {
-        type: String,
-        required: true,
-      },
-    
-  },
+      type: String,
+      required: true,
+    },
+      author: { type: Schema.Types.ObjectId, ref: "User" },
+      title: String,
+      content: String,
+      comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }]
+    },
   {
-    // this second object adds extra properties: `createdAt` and `updatedAt`
     timestamps: true,
   }
 );
