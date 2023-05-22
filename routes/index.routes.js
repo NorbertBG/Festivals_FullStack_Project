@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const appGenres = require("../utils/genres");
 
-// ********* require fileUploader in order to use it *********
-const fileUploader = require('../config/cloudinary.config');
 
 const countryList = require("../middleware/getCountryList");
 
@@ -13,6 +11,8 @@ const Festival = require("../models/Festival.model");
 const User = require("../models/User.model")
 const Comment = require("../models/Comment.model")
 
+// ********* require fileUploader in order to use it *********
+const fileUploader = require('../config/cloudinary.config');
 
 /* GET home page where you can login or register */
 router.get("/", (req, res, next) => {
@@ -91,7 +91,7 @@ router.get("/festivals/new", countryList, (req, res, next) => {
 /* POST add a new festival */
 router.post("/festivals/new", fileUploader.single('eventImage'), (req, res, next) => {
   const { name, country, city, description, genre, season } = req.body;
-  console.log(req.body)
+  console.log('this is:', req.file)
   Festival.create({ name, country, city, description, genre, season, eventImage: req.file.path })
     .then((datafromDB) => {
       console.log(datafromDB)

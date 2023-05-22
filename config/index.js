@@ -57,7 +57,8 @@ module.exports = (app) => {
       resave: false,
       saveUninitialized: false,
       store: MongoStore.create({
-        mongoUrl:"mongodb+srv://norbertbg:HclfkmLybFr18onF@ironhack.ripkvp3.mongodb.net/?retryWrites=true&w=majority"
+        mongoUrl:"mongodb+srv://norbertbg:HclfkmLybFr18onF@ironhack.ripkvp3.mongodb.net/Festivals"
+
       }),
     })
   );
