@@ -58,7 +58,7 @@ module.exports = (app) => {
       resave: false,
       saveUninitialized: false,
       store: MongoStore.create({
-        mongoUrl: MONGO_URI,
+        mongoUrl: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/Festivals"
       }),
     })
   );

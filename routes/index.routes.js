@@ -91,7 +91,7 @@ router.get("/festivals/new", countryList, (req, res, next) => {
 /* POST add a new festival */
 router.post("/festivals/new", fileUploader.single('eventImage'), (req, res, next) => {
   const { name, country, city, description, genre, season } = req.body;
-
+  console.log(req.body)
   Festival.create({ name, country, city, description, genre, season, eventImage: req.file.path })
     .then((datafromDB) => {
       console.log(datafromDB)
