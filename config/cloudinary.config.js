@@ -3,11 +3,16 @@
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
+const dotenv = require("dotenv");
+const path = require("path");
+ 
+dotenv.config();
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME,
-  api_key: process.env.CLOUDINARY_KEY,
-  api_secret: process.env.CLOUDINARY_SECRET
+  cloud_name: process.env.CLOUDINARY_NAME || "dc0tzx7fa",
+  api_key: process.env.CLOUDINARY_KEY || "821652497219421",
+  api_secret: process.env.CLOUDINARY_SECRET || "c-GaeDtDZp2KgACO6HHt3JRVH0c",
+  secure: true  // Add this line to enable the secure option
 });
 
 const storage = new CloudinaryStorage({
@@ -22,3 +27,4 @@ const storage = new CloudinaryStorage({
 
 //                     storage: storage
 module.exports = multer({ storage });
+

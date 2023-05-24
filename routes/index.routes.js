@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const appGenres = require("../utils/genres");
 
+// ********* require fileUploader in order to use it *********
+const fileUploader = require('../config/cloudinary.config');
 
 const countryList = require("../middleware/getCountryList");
 
@@ -11,8 +13,6 @@ const Festival = require("../models/Festival.model");
 const User = require("../models/User.model")
 const Comment = require("../models/Comment.model")
 
-// ********* require fileUploader in order to use it *********
-const fileUploader = require('../config/cloudinary.config');
 
 /* GET home page where you can login or register */
 router.get("/", (req, res, next) => {
@@ -71,13 +71,6 @@ router.get("/countries", (req, res, next) => {
     })
 });
 
-/* GET All festivals in one city */
-router.get("/:city/festivals", (req, res, next) => {
-  res.render("city-festivals");
-});
-
-
-
 /* GET add a new festival */
 router.get("/festivals/new", countryList, (req, res, next) => {
   const countries = [];
@@ -92,16 +85,16 @@ router.get("/festivals/new", countryList, (req, res, next) => {
 router.post("/festivals/new", fileUploader.single('eventImage'), (req, res, next) => {
   const { name, country, city, description, genre, season } = req.body;
   console.log('this is:', req.file)
-  Festival.create({ name, country, city, description, genre, season, eventImage: req.file.path })
-    .then((datafromDB) => {
-      console.log(datafromDB)
-      res.redirect('/festivals');
-    });
+
+  // Festival.create({ name, country, city, description, genre, season, eventImage: req.file.path })
+  //   .then((datafromDB) => {
+  //     console.log(datafromDB)
+  //     res.redirect('/festivals');
+  //   });
 });
 
 /* GET details of one festival */
 router.get("/festivals/:festivalID", (req, res, next) => {
-
   const { festivalID } = req.params;
   /**
    * Optional: We read the "message" variable exists and
@@ -161,26 +154,29 @@ router.get("/festivals/:festivalID/edit", countryList, (req, res, next) => {
     })
 });
 
-router.post('/festivals/:festivalID/edit', (request, response) => {
-  const { id, name, description, genre, season, location } = request.body;
-
-  Festival.findByIdAndUpdate(id, {
-    name: name,
-    description: description,
-    genre: genre,
-    season: season,
-    location: location
-  }, { returnOriginal: false }).then((data) => {
-    /**
-     * Optional: We set a new variable "message" under request.session
-     * which will be used later as a notification message
-     */
-    request.session.message = {
-      type: 'success',
-      body: 'Your changes has been saved'
-    };
-    response.redirect(`/festivals/${data.id}`);
-  })
+router.post('/festivals/:festivalID/edit',fileUploader.single('eventImage'), (request, response) => {
+  const { id, name, country, description, genre, eventImage, season, city } = request.body;
+  // const eventImage = request.file.path;
+  console.log(request.file)
+  // Festival.findByIdAndUpdate(id, {
+  //   name: name,
+  //   country: country,
+  //   description: description,
+  //   genre: genre,
+  //   eventImage: request.file.path,
+  //   season: season,
+  //   city: city
+  // }, { returnOriginal: false }).then((data) => {
+  //   /**
+  //    * Optional: We set a new variable "message" under request.session
+  //    * which will be used later as a notification message
+  //    */
+  //   request.session.message = {
+  //     type: 'success',
+  //     body: 'Your changes has been saved'
+  //   };
+  //   response.redirect(`/festivals/${data.id}`);
+  // })
 });
 
 router.post('/festivals/:festivalID/delete', (req, res) => {
@@ -227,7 +223,7 @@ router.post("/festivals/:festivalId/comment", (req, res, next) => {
 
               // ... and push its ID in the array of comments that belong to this specific post
               dbFestival.comments.push(dbComment._id);
-              
+
               // 4. after adding the ID in the array of comments, we have to save changes in the post
               dbFestival
                 .save()       // 5. if everything is ok, we redirect to the same page to see the comment
@@ -245,14 +241,14 @@ router.post("/festivals/:festivalID/comments/:commentID/delete", (req, res, next
   const { festivalID, commentID } = req.params;
 
   Comment.findByIdAndRemove(commentID)
-  .then(() => {
-    // Comment deleted successfully
-    res.redirect(`/festivals/${festivalID}`);
-  })
-  .catch((error) => {
-    console.log(`Error deleting comment: ${error}`);
-    next(error);
-  });
+    .then(() => {
+      // Comment deleted successfully
+      res.redirect(`/festivals/${festivalID}`);
+    })
+    .catch((error) => {
+      console.log(`Error deleting comment: ${error}`);
+      next(error);
+    });
 });
 
 

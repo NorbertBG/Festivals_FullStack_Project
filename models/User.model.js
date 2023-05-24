@@ -24,7 +24,7 @@ const userSchema = new Schema(
     profileImage: {
       type: String,
     },
-    Festival: [{ type: Schema.Types.ObjectId, ref: "Festival" }]
+    festival: [{ type: Schema.Types.ObjectId, ref: "Festival" }]
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

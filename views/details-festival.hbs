@@ -24,7 +24,7 @@
                         <button class="bg-yellow-300 opacity-75 hover:opacity-100 text-white hover:text-gray-900 rounded-full px-10 py-2 font-semibold"><a href="/festivals/{{ data.id }}/edit">Edit</a> </button>
                     </div>
                     <div class="inline-block align-bottom">
-                        <button class="bg-yellow-300 opacity-75 hover:opacity-100 text-white hover:text-gray-900 rounded-full px-10 py-2 font-semibold">Contact me</button>
+                        <button class="bg-yellow-300 opacity-75 hover:opacity-100 text-white hover:text-gray-900 rounded-full px-10 py-2 font-semibold"><a href="#comment">Contact me</a></button>
                     </div>
                 </div>
             </div>
@@ -45,11 +45,12 @@
                 class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none"
                 placeholder="Write a comment..." required></textarea>
         </div>
-        <button type="submit"
+        <button id="comment" type="submit"
             class="inline-flex items-center py-2.5 px-4 text-xs border font-medium text-center text-black bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200  hover:bg-primary-800">
             Post comment
         </button>
     </form>
+
     {{#each data.comments}}
     <article class="p-6 mb-6 text-base bg-white rounded-lg ">
         <footer class="flex justify-between items-center mb-2">
@@ -60,6 +61,7 @@
                         alt="Author">{{this.author.firstName}} {{this.author.lastName}}</p>
                 <p class="text-sm text-gray-600 "><time pubdate datetime="2022-02-08"
                         title="February 8th, 2022">Feb. 8, 2022</time></p>
+                    
             </div>
             <button id="dropdownComment1Button" data-dropdown-toggle="dropdownComment1"
                 class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-400 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 "
