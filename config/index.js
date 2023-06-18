@@ -26,7 +26,7 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 
 // Connects the mongo uri to maintain the same naming structure
-const MONGO_URI ="mongodb+srv://norbertbg:HclfkmLybFr18onF@ironhack.ripkvp3.mongodb.net/?retryWrites=true&w=majority"
+const MONGO_URI ="mongodb+srv://norbertbg:HclfkmLybFr18onF@ironhack.ripkvp3.mongodb.net/Festivals"
 
 // Middleware configuration
 module.exports = (app) => {
@@ -57,7 +57,7 @@ module.exports = (app) => {
       resave: false,
       saveUninitialized: false,
       store: MongoStore.create({
-        mongoUrl:"mongodb+srv://norbertbg:HclfkmLybFr18onF@ironhack.ripkvp3.mongodb.net/Festivals"
+        mongoUrl: MONGO_URI,
 
       }),
     })

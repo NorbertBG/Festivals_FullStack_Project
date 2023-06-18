@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const appGenres = require("../utils/genres");
+const path = require("path");
 
 // ********* require fileUploader in order to use it *********
 const fileUploader = require('../config/cloudinary.config');
@@ -86,11 +87,11 @@ router.post("/festivals/new", fileUploader.single('eventImage'), (req, res, next
   const { name, country, city, description, genre, season } = req.body;
   console.log('this is:', req.file)
 
-  // Festival.create({ name, country, city, description, genre, season, eventImage: req.file.path })
-  //   .then((datafromDB) => {
-  //     console.log(datafromDB)
-  //     res.redirect('/festivals');
-  //   });
+  Festival.create({ name, country, city, description, genre, season, eventImage: req.file.path })
+    .then((datafromDB) => {
+      console.log(datafromDB)
+      res.redirect('/festivals');
+    });
 });
 
 /* GET details of one festival */
@@ -154,102 +155,102 @@ router.get("/festivals/:festivalID/edit", countryList, (req, res, next) => {
     })
 });
 
-router.post('/festivals/:festivalID/edit',fileUploader.single('eventImage'), (request, response) => {
-  const { id, name, country, description, genre, eventImage, season, city } = request.body;
-  // const eventImage = request.file.path;
-  console.log(request.file)
-  // Festival.findByIdAndUpdate(id, {
-  //   name: name,
-  //   country: country,
-  //   description: description,
-  //   genre: genre,
-  //   eventImage: request.file.path,
-  //   season: season,
-  //   city: city
-  // }, { returnOriginal: false }).then((data) => {
-  //   /**
-  //    * Optional: We set a new variable "message" under request.session
-  //    * which will be used later as a notification message
-  //    */
-  //   request.session.message = {
-  //     type: 'success',
-  //     body: 'Your changes has been saved'
-  //   };
-  //   response.redirect(`/festivals/${data.id}`);
-  // })
-});
+router.post('/festivals/:festivalID/edit', fileUploader.single('eventImage'), (req, res) => {
+  console.log(req.file)
+  const { id, name, country, description, genre, season, city } = req.body;
+  const newEventImage = req.file;
+  Festival.findByIdAndUpdate(id, {
+    name: name,
+    country: country,
+    description: description,
+    genre: genre,
+    eventImage: newEventImage,
+    season: season,
+    city: city
+  }, { returnOriginal: false }).then((data) => {
+    /**
+     * Optional: We set a new variable "message" under request.session
+     * which will be used later as a notification message
+     */
+    req.session.message = {
+      type: 'success',
+      body: 'Your changes has been saved'
+    };
+    res.redirect(`/festivals/${data.id}`);
+  });
+})
 
-router.post('/festivals/:festivalID/delete', (req, res) => {
-  const { festivalID } = req.params
+  router.post('/festivals/:festivalID/delete', (req, res) => {
+    const { festivalID } = req.params
 
-  Festival.findByIdAndDelete(festivalID)
-    .then(() => res.redirect("/festivals"))
-    .catch(error => next(error));
-});
+    Festival.findByIdAndDelete(festivalID)
+      .then(() => res.redirect("/festivals"))
+      .catch(error => next(error));
+  });
 
-// POST comments in festivals details page
-router.post("/festivals/:festivalId/comment", (req, res, next) => {
-  const { festivalId } = req.params;
-  const { author, content } = req.body;
+  // POST comments in festivals details page
+  router.post("/festivals/:festivalId/comment", (req, res, next) => {
+    const { festivalId } = req.params;
+    const { author, content } = req.body;
 
-  let user;
+    let user;
 
-  User.findOne({ email: author })
-    .then((userDocFromDB) => {
-      user = userDocFromDB;
+    User.findOne({ email: author })
+      .then((userDocFromDB) => {
+        user = userDocFromDB;
 
-      // 1. if commenter is not user yet, let's register him/her as a user
-      if (!userDocFromDB) {
-        return User.create({ email: author });
-      }
-    })
-    .then((newUser) => {
-      // prettier-ignore
-      Festival.findById(festivalId)
-        .then(dbFestival => {
-          let newComment;
+        // 1. if commenter is not user yet, let's register him/her as a user
+        if (!userDocFromDB) {
+          return User.create({ email: author });
+        }
+      })
+      .then((newUser) => {
+        // prettier-ignore
+        Festival.findById(festivalId)
+          .then(dbFestival => {
+            let newComment;
 
-          // 2. the conditional is result of having the possibility that we have already existing or new users
-          if (newUser) {
-            newComment = new Comment({ author: newUser._id, content });
-          } else {
-            newComment = new Comment({ author: user._id, content });
-          }
+            // 2. the conditional is result of having the possibility that we have already existing or new users
+            if (newUser) {
+              newComment = new Comment({ author: newUser._id, content });
+            } else {
+              newComment = new Comment({ author: user._id, content });
+            }
 
-          // 3. when new comment is created, we save it ...
-          newComment
-            .save()
-            .then(dbComment => {
+            // 3. when new comment is created, we save it ...
+            newComment
+              .save()
+              .then(dbComment => {
 
-              // ... and push its ID in the array of comments that belong to this specific post
-              dbFestival.comments.push(dbComment._id);
+                // ... and push its ID in the array of comments that belong to this specific post
+                dbFestival.comments.push(dbComment._id);
 
-              // 4. after adding the ID in the array of comments, we have to save changes in the post
-              dbFestival
-                .save()       // 5. if everything is ok, we redirect to the same page to see the comment
-                .then(updatedFestival => res.redirect(`/festivals/${updatedFestival._id}`))
-            });
-        });
-    })
-    .catch((err) => {
-      console.log(`Error while creating the comment: ${err}`);
-      next(err);
-    });
-});
+                // 4. after adding the ID in the array of comments, we have to save changes in the post
+                dbFestival
+                  .save()       // 5. if everything is ok, we redirect to the same page to see the comment
+                  .then(updatedFestival => res.redirect(`/festivals/${updatedFestival._id}`))
+              });
+          });
+      })
+      .catch((err) => {
+        console.log(`Error while creating the comment: ${err}`);
+        next(err);
+      });
+  });
 
-router.post("/festivals/:festivalID/comments/:commentID/delete", (req, res, next) => {
-  const { festivalID, commentID } = req.params;
+  router.post("/festivals/:festivalID/comments/:commentID/delete", (req, res, next) => {
+    const { festivalID, commentID } = req.params;
 
-  Comment.findByIdAndRemove(commentID)
-    .then(() => {
-      // Comment deleted successfully
-      res.redirect(`/festivals/${festivalID}`);
-    })
-    .catch((error) => {
-      console.log(`Error deleting comment: ${error}`);
-      next(error);
-    });
-});
+    Comment.findByIdAndRemove(commentID)
+      .then(() => {
+        // Comment deleted successfully
+        res.redirect(`/festivals/${festivalID}`);
+      })
+      .catch((error) => {
+        console.log(`Error deleting comment: ${error}`);
+        next(error);
+      });
+  });
 
 
-module.exports = router;
+  module.exports = router;
